@@ -15,7 +15,12 @@ const achievementSchema = new mongoose.Schema({
     firstPostDelete: { type: Boolean, default: false },
     firstLike: { type: Boolean, default: false },
     firstReply: { type: Boolean, default: false },
-    tenSongs: { type: Boolean, default: false }
+    tenSongs: { type: Boolean, default: false },
+    fiveMinutes: { type: Boolean, default: false }
+  },
+  totalListeningTime: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
