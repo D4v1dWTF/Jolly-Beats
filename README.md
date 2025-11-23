@@ -58,6 +58,9 @@ COMP3810SEF Group Project
 - Conversationalist: Reply to a forum post
 - Music Collector: Upload 10 songs
 - Music Enthusiast: Listen to music for 5 minutes
+- Music Critic: Rate a song for the first time
+- Five Star Fan: Give a 5 star rating
+- Honest Critic: Give a 1 star rating
 
 ### Additional Features
 - Responsive design for all devices

@@ -844,6 +844,20 @@ header nav a:hover {
   width: 100%;
 }
 
+/* Form Buttons Alignment */
+.form-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.form-buttons .btn {
+  width: 200px;
+  text-align: center;
+}
+
 /* Font Size Adjustment */
 :root {
   --font-size-base: 16px;

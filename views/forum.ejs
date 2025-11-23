@@ -143,8 +143,10 @@
                 <div class="reply-form" id="reply-form-<%= post._id %>" style="display:none;">
                   <form action="/forum/reply/<%= post._id %>" method="POST">
                     <textarea name="content" placeholder="Write a reply... (max 300 characters)" maxlength="300" required></textarea>
-                    <button type="submit" class="btn btn-primary">Submit Reply</button>
-                    <button type="button" class="btn btn-secondary" onclick="toggleReplyForm('<%= post._id %>')">Cancel</button>
+                    <div class="form-buttons">
+                      <button type="submit" class="btn btn-primary">Submit Reply</button>
+                      <button type="button" class="btn btn-secondary" onclick="toggleReplyForm('<%= post._id %>')">Cancel</button>
+                    </div>
                   </form>
                 </div>
               </div>

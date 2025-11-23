@@ -135,6 +135,35 @@ router.post('/rate/:id', isLoggedIn, async (req, res) => {
     song.averageRating = (totalRating / song.ratings.length).toFixed(1);
     
     await song.save();
+    
+    // Check achievements
+    let achievements = await Achievement.findOne({ user: req.session.user.id });
+    if (!achievements) {
+      achievements = new Achievement({ user: req.session.user.id });
+    }
+    
+    let unlockedAchievement = null;
+    
+    if (!achievements.achievements.firstRating && !existingRating) {
+      achievements.achievements.firstRating = true;
+      unlockedAchievement = 'Music Critic|Rate a song for the first time';
+    }
+    
+    if (ratingNum === 5 && !achievements.achievements.firstFiveStar) {
+      achievements.achievements.firstFiveStar = true;
+      unlockedAchievement = 'Five Star Fan|Give a 5 star rating';
+    }
+    
+    if (ratingNum === 1 && !achievements.achievements.firstOneStar) {
+      achievements.achievements.firstOneStar = true;
+      unlockedAchievement = 'Honest Critic|Give a 1 star rating';
+    }
+    
+    await achievements.save();
+    
+    if (unlockedAchievement) {
+      return res.redirect('/songs/browse?achievement=' + encodeURIComponent(unlockedAchievement));
+    }
     res.redirect('/songs/browse');
   } catch (error) {
     console.error('Rate song error:', error);

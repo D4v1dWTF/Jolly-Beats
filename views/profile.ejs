@@ -189,6 +189,36 @@
                 <span class="status">Locked</span>
               <% } %>
             </div>
+
+            <div class="achievement <%= achievements.achievements.firstRating ? 'unlocked' : 'locked' %>">
+              <h4>Music Critic</h4>
+              <p>Rate a song for the first time</p>
+              <% if (achievements.achievements.firstRating) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstFiveStar ? 'unlocked' : 'locked' %>">
+              <h4>Five Star Fan</h4>
+              <p>Give a 5 star rating</p>
+              <% if (achievements.achievements.firstFiveStar) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstOneStar ? 'unlocked' : 'locked' %>">
+              <h4>Honest Critic</h4>
+              <p>Give a 1 star rating</p>
+              <% if (achievements.achievements.firstOneStar) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
