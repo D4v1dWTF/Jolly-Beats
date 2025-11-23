@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Jolly Beats</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/">Jolly Beats</a></h1>
+      <nav>
+        <a href="/songs">My Songs</a>
+        <a href="/songs/browse">World</a>
+        <a href="/playlists">Playlists</a>
+        <a href="/forum">Forum</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="btn-logout">Logout (<%= user.username %>)</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <h2>My Profile</h2>
+
+      <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <% if (success) { %>
+        <div class="success-message"><%= success %></div>
+      <% } %>
+
+      <div class="profile-container">
+        <div class="profile-section">
+          <h3>Avatar</h3>
+          <div class="avatar-display">
+            <% if (user.avatar && user.avatar !== 'default-avatar.png') { %>
+              <img src="/avatars/<%= user.avatar %>" alt="Avatar" class="avatar-image">
+            <% } else { %>
+              <div class="default-avatar"><%= user.username.charAt(0).toUpperCase() %></div>
+            <% } %>
+          </div>
+          <form action="/profile/upload-avatar" method="POST" enctype="multipart/form-data" class="avatar-form">
+            <input type="file" name="avatar" accept="image/*" required>
+            <button type="submit" class="btn btn-primary">Upload Avatar</button>
+          </form>
+          <p class="form-note">Max size: 2MB. Formats: JPG, PNG, GIF</p>
+        </div>
+
+        <div class="profile-section">
+          <h3>Account Information</h3>
+          <p><strong>Username:</strong> <%= user.username %> (for login)</p>
+          <p><strong>Display Name:</strong> <%= user.displayName || user.username %> (shown to others)</p>
+          <p><strong>Email:</strong> <%= user.email %></p>
+          <p><strong>Member Since:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></p>
+          <p><strong>Total Songs:</strong> <%= songCount %></p>
+        </div>
+
+        <div class="profile-section">
+          <h3>Change Display Name</h3>
+          <form action="/profile/change-displayname" method="POST" class="form">
+            <div class="form-group">
+              <label for="displayName">Display Name:</label>
+              <input type="text" id="displayName" name="displayName" value="<%= user.displayName || user.username %>" maxlength="50" required>
+              <small>This is the name shown to other users (max 50 characters)</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Display Name</button>
+          </form>
+        </div>
+
+        <div class="profile-section">
+          <h3>Change Password</h3>
+          <form action="/profile/change-password" method="POST" class="form">
+            <div class="form-group">
+              <label for="currentPassword">Current Password:</label>
+              <input type="password" id="currentPassword" name="currentPassword" required>
+            </div>
+
+            <div class="form-group">
+              <label for="newPassword">New Password:</label>
+              <input type="password" id="newPassword" name="newPassword" minlength="6" required>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm New Password:</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" minlength="6" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Change Password</button>
+          </form>
+        </div>
+
+        <div class="profile-section">
+          <h3>Achievements</h3>
+          <div class="achievements-grid">
+            <div class="achievement <%= achievements.achievements.firstPlaylist ? 'unlocked' : 'locked' %>">
+              <h4>Playlist Creator</h4>
+              <p>Create your first playlist</p>
+              <% if (achievements.achievements.firstPlaylist) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstSong ? 'unlocked' : 'locked' %>">
+              <h4>First Upload</h4>
+              <p>Upload your first song</p>
+              <% if (achievements.achievements.firstSong) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstPost ? 'unlocked' : 'locked' %>">
+              <h4>Forum Member</h4>
+              <p>Post your first message</p>
+              <% if (achievements.achievements.firstPost) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstDelete ? 'unlocked' : 'locked' %>">
+              <h4>Song Manager</h4>
+              <p>Delete a song</p>
+              <% if (achievements.achievements.firstDelete) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstPostDelete ? 'unlocked' : 'locked' %>">
+              <h4>Content Moderator</h4>
+              <p>Delete a post</p>
+              <% if (achievements.achievements.firstPostDelete) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstLike ? 'unlocked' : 'locked' %>">
+              <h4>Supporter</h4>
+              <p>Like a forum post</p>
+              <% if (achievements.achievements.firstLike) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.firstReply ? 'unlocked' : 'locked' %>">
+              <h4>Conversationalist</h4>
+              <p>Reply to a forum post</p>
+              <% if (achievements.achievements.firstReply) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.tenSongs ? 'unlocked' : 'locked' %>">
+              <h4>Music Collector</h4>
+              <p>Upload 10 songs</p>
+              <% if (achievements.achievements.tenSongs) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+
+            <div class="achievement <%= achievements.achievements.fiveMinutes ? 'unlocked' : 'locked' %>">
+              <h4>Music Enthusiast</h4>
+              <p>Listen to music for 5 minutes</p>
+              <% if (achievements.achievements.fiveMinutes) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Jolly Beats</p>
+    </footer>
+  </div>
+</body>
+</html>
+
