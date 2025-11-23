@@ -1,0 +1,206 @@
+// Playlist Routes
+const express = require('express');
+const router = express.Router();
+const Playlist = require('../models/Playlist');
+const Song = require('../models/Song');
+const Achievement = require('../models/Achievement');
+const { isLoggedIn } = require('../middleware/auth');
+
+// List all playlists
+router.get('/', isLoggedIn, async (req, res) => {
+  try {
+    const playlists = await Playlist.find({ owner: req.session.user.id })
+      .populate('songs')
+      .sort({ createdAt: -1 });
+    res.render('playlists', { 
+      playlists, 
+      user: req.session.user, 
+      achievement: req.query.achievement || null 
+    });
+  } catch (error) {
+    console.error('Error fetching playlists:', error);
+    res.status(500).send('Error fetching playlists');
+  }
+});
+
+// New playlist form
+router.get('/create', isLoggedIn, (req, res) => {
+  res.render('createPlaylist', { error: null, user: req.session.user });
+});
+
+// Create playlist
+router.post('/create', isLoggedIn, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    
+    // Validation
+    if (!name || name.trim() === '') {
+      return res.render('createPlaylist', { error: 'Playlist name is required', user: req.session.user });
+    }
+    
+    // Create new playlist
+    const newPlaylist = new Playlist({
+      name,
+      description: description || '',
+      owner: req.session.user.id,
+      songs: []
+    });
+    
+    await newPlaylist.save();
+    
+    let achievements = await Achievement.findOne({ user: req.session.user.id });
+    if (!achievements) {
+      achievements = new Achievement({ user: req.session.user.id });
+    }
+    
+    let unlockedAchievement = null;
+    
+    if (!achievements.achievements.firstPlaylist) {
+      achievements.achievements.firstPlaylist = true;
+      unlockedAchievement = 'Playlist Creator|Create your first playlist';
+      await achievements.save();
+    }
+    
+    if (unlockedAchievement) {
+      return res.redirect('/playlists?achievement=' + encodeURIComponent(unlockedAchievement));
+    }
+    res.redirect('/playlists');
+  } catch (error) {
+    console.error('Create playlist error:', error);
+    res.render('createPlaylist', { error: 'Failed to create playlist. Please try again.', user: req.session.user });
+  }
+});
+
+// View playlist details
+router.get('/:id', isLoggedIn, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.id)
+      .populate('songs')
+      .populate('owner', 'username');
+    
+    if (!playlist) {
+      return res.status(404).send('Playlist not found');
+    }
+    
+    // Check if user owns the playlist
+    if (playlist.owner._id.toString() !== req.session.user.id) {
+      return res.status(403).send('You can only view your own playlists');
+    }
+    
+    // Get only user's songs for adding to playlist
+    const allSongs = await Song.find({ uploadedBy: req.session.user.id });
+    
+    res.render('playlistDetail', { playlist, allSongs, user: req.session.user });
+  } catch (error) {
+    console.error('Error fetching playlist:', error);
+    res.status(500).send('Error fetching playlist');
+  }
+});
+
+// Add song to playlist
+router.post('/:id/add-song', isLoggedIn, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.id);
+    
+    if (!playlist) {
+      return res.status(404).send('Playlist not found');
+    }
+    
+    // Check if user owns the playlist
+    if (playlist.owner.toString() !== req.session.user.id) {
+      return res.status(403).send('You can only modify your own playlists');
+    }
+    
+    const { songId } = req.body;
+    
+    // Validation
+    if (!songId) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(400).json({ error: 'Song ID is required' });
+      }
+      return res.redirect(`/playlists/${req.params.id}`);
+    }
+    
+    // Check if song exists
+    const song = await Song.findById(songId);
+    if (!song) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(404).json({ error: 'Song not found' });
+      }
+      return res.status(404).send('Song not found');
+    }
+    
+    // Check if song already in playlist
+    if (playlist.songs.includes(songId)) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(400).json({ error: 'Song already in playlist' });
+      }
+      return res.redirect(`/playlists/${req.params.id}`);
+    }
+    
+    // Add song to playlist
+    playlist.songs.push(songId);
+    await playlist.save();
+    
+    if (req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true });
+    }
+    res.redirect(`/playlists/${req.params.id}`);
+  } catch (error) {
+    console.error('Add song error:', error);
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ error: 'Error adding song to playlist' });
+    }
+    res.status(500).send('Error adding song to playlist');
+  }
+});
+
+// Remove song from playlist
+router.post('/:id/remove-song/:songId', isLoggedIn, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.id);
+    
+    if (!playlist) {
+      return res.status(404).send('Playlist not found');
+    }
+    
+    // Check if user owns the playlist
+    if (playlist.owner.toString() !== req.session.user.id) {
+      return res.status(403).send('You can only modify your own playlists');
+    }
+    
+    // Remove song from playlist
+    playlist.songs = playlist.songs.filter(songId => songId.toString() !== req.params.songId);
+    await playlist.save();
+    
+    res.redirect(`/playlists/${req.params.id}`);
+  } catch (error) {
+    console.error('Remove song error:', error);
+    res.status(500).send('Error removing song from playlist');
+  }
+});
+
+// Delete playlist
+router.post('/delete/:id', isLoggedIn, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.id);
+    
+    if (!playlist) {
+      return res.status(404).send('Playlist not found');
+    }
+    
+    // Check if user owns the playlist
+    if (playlist.owner.toString() !== req.session.user.id) {
+      return res.status(403).send('You can only delete your own playlists');
+    }
+    
+    await Playlist.findByIdAndDelete(req.params.id);
+    res.redirect('/playlists');
+  } catch (error) {
+    console.error('Delete playlist error:', error);
+    res.status(500).send('Error deleting playlist');
+  }
+});
+
+module.exports = router;
+

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World - Jolly Beats</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="font-size-toggle" onclick="toggleFontSize()">
+        <span class="size-a" id="sizeSmall">A</span>
+        <span class="size-a" id="sizeNormal">A</span>
+        <span class="size-a" id="sizeLarge">A</span>
+      </button>
+      <h1><a href="/">Jolly Beats</a></h1>
+      <nav>
+        <a href="/songs">My Songs</a>
+        <a href="/songs/browse">World</a>
+        <a href="/playlists">Playlists</a>
+        <a href="/forum">Forum</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="btn-logout">Logout (<%= user.username %>)</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <h2>World</h2>
+        <p>Discover and rate music uploaded by all users</p>
+      </div>
+
+      <!-- Search Form -->
+      <div class="search-box">
+        <form action="/songs/browse" method="GET" class="search-form">
+          <input type="text" name="search" placeholder="Search by title, artist, or album..." value="<%= search %>">
+          <input type="text" name="genre" placeholder="Genre" value="<%= genre %>">
+          <input type="text" name="artist" placeholder="Artist" value="<%= artist %>">
+          <button type="submit" class="btn btn-secondary">Search</button>
+          <a href="/songs/browse" class="btn btn-secondary">Clear</a>
+        </form>
+      </div>
+
+      <p style="margin-bottom: 20px; color: #666;">Showing all users' songs</p>
+
+      <!-- Songs List -->
+      <div class="songs-list">
+        <% if (songs.length === 0) { %>
+          <p class="no-data">No songs found.</p>
+        <% } else { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Uploaded By</th>
+                <th>Rating</th>
+                <th>Play</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% songs.forEach(song => { %>
+                <tr>
+                  <td><%= song.title %></td>
+                  <td><%= song.artist %></td>
+                  <td><%= song.album || '-' %></td>
+                  <td><%= song.genre || '-' %></td>
+                  <td><%= song.year || '-' %></td>
+                  <td><%= song.uploadedBy.displayName %></td>
+                  <td>
+                    <% if (song.uploadedBy._id.toString() === user.id) { %>
+                      <div class="rating-display">
+                        <%= song.averageRating > 0 ? song.averageRating : 'N/A' %>
+                      </div>
+                    <% } else { %>
+                      <% const userRating = song.ratings.find(r => r.user && r.user.toString() === user.id); %>
+                      <form action="/songs/rate/<%= song._id %>" method="POST" class="rating-form">
+                        <select name="rating" onchange="this.form.submit()" class="rating-select">
+                          <option value="">Rate</option>
+                          <option value="1" <%= userRating && userRating.rating === 1 ? 'selected' : '' %>>1</option>
+                          <option value="2" <%= userRating && userRating.rating === 2 ? 'selected' : '' %>>2</option>
+                          <option value="3" <%= userRating && userRating.rating === 3 ? 'selected' : '' %>>3</option>
+                          <option value="4" <%= userRating && userRating.rating === 4 ? 'selected' : '' %>>4</option>
+                          <option value="5" <%= userRating && userRating.rating === 5 ? 'selected' : '' %>>5</option>
+                        </select>
+                      </form>
+                      <% if (song.averageRating > 0) { %>
+                        <small style="display:block;color:#667eea;"><%= song.averageRating %></small>
+                      <% } %>
+                    <% } %>
+                  </td>
+                  <td>
+                    <audio controls data-song-id="<%= song._id %>">
+                      <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
+                      Your browser does not support audio playback.
+                    </audio>
+                  </td>
+                  <td>
+                    <button class="btn-small btn-primary" onclick="openAddToPlaylist('<%= song._id %>', '<%= song.title.replace(/'/g, "\\'") %>')">Add</button>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Jolly Beats</p>
+    </footer>
+  </div>
+
+  <!-- Add to Playlist Modal -->
+  <div id="addToPlaylistModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>Add to Playlist</h3>
+      <p id="songToAdd"></p>
+      <form id="addToPlaylistForm" method="POST">
+        <select name="playlistId" id="playlistSelect" required>
+          <option value="">Select a playlist...</option>
+        </select>
+        <div class="form-buttons">
+          <button type="submit" class="btn btn-primary">Add to Playlist</button>
+          <button type="button" class="btn btn-secondary" onclick="closeAddToPlaylist()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function updateFontSizeIndicator() {
+      const currentSize = localStorage.getItem('fontSize') || 'normal';
+      document.getElementById('sizeSmall').classList.remove('active');
+      document.getElementById('sizeNormal').classList.remove('active');
+      document.getElementById('sizeLarge').classList.remove('active');
+
+      if (currentSize === 'small') {
+        document.getElementById('sizeSmall').classList.add('active');
+      } else if (currentSize === 'large') {
+        document.getElementById('sizeLarge').classList.add('active');
+      } else {
+        document.getElementById('sizeNormal').classList.add('active');
+      }
+    }
+
+    function toggleFontSize() {
+      const body = document.body;
+      const currentSize = localStorage.getItem('fontSize') || 'normal';
+      let newSize;
+
+      if (currentSize === 'normal') {
+        newSize = 'large';
+        body.className = 'font-large';
+      } else if (currentSize === 'large') {
+        newSize = 'small';
+        body.className = 'font-small';
+      } else {
+        newSize = 'normal';
+        body.className = '';
+      }
+
+      localStorage.setItem('fontSize', newSize);
+      updateFontSizeIndicator();
+    }
+
+    window.addEventListener('load', function() {
+      const savedSize = localStorage.getItem('fontSize') || 'normal';
+      if (savedSize === 'small') {
+        document.body.className = 'font-small';
+      } else if (savedSize === 'large') {
+        document.body.className = 'font-large';
+      }
+      updateFontSizeIndicator();
+    });
+
+    let listeningStartTime = null;
+    let currentAudio = null;
+
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.addEventListener('play', function() {
+        listeningStartTime = Date.now();
+        currentAudio = this;
+      });
+
+      audio.addEventListener('pause', function() {
+        if (listeningStartTime) {
+          const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
+          if (listeningTime > 0) {
+            trackListening(listeningTime);
+          }
+          listeningStartTime = null;
+        }
+      });
+
+      audio.addEventListener('ended', function() {
+        if (listeningStartTime) {
+          const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
+          if (listeningTime > 0) {
+            trackListening(listeningTime);
+          }
+          listeningStartTime = null;
+        }
+      });
+    });
+
+    function trackListening(seconds) {
+      fetch('/songs/track-listening', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ seconds: seconds })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.achievement) {
+          showAchievement(data.achievement);
+        }
+      })
+      .catch(err => console.error('Track listening error:', err));
+    }
+
+    function showAchievement(achievement) {
+      const parts = achievement.split('|');
+      const name = parts[0];
+      const desc = parts[1] || '';
+      
+      const notif = document.createElement('div');
+      notif.className = 'achievement-notification show';
+      notif.innerHTML = `
+        <div class="achievement-content">
+          <strong>Achievement Unlocked!</strong>
+          <p class="achievement-title">${name}</p>
+          ${desc ? `<small class="achievement-desc">${desc}</small>` : ''}
+        </div>
+      `;
+      document.body.appendChild(notif);
+      
+      setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => notif.remove(), 500);
+      }, 5000);
+    }
+
+    let currentSongId = null;
+
+    async function openAddToPlaylist(songId, songTitle) {
+      currentSongId = songId;
+      document.getElementById('songToAdd').textContent = 'Song: ' + songTitle;
+      
+      try {
+        const response = await fetch('/api/playlists');
+        const playlists = await response.json();
+        
+        const select = document.getElementById('playlistSelect');
+        select.innerHTML = '<option value="">Select a playlist...</option>';
+        
+        playlists.forEach(playlist => {
+          const option = document.createElement('option');
+          option.value = playlist._id;
+          option.textContent = playlist.name;
+          select.appendChild(option);
+        });
+        
+        document.getElementById('addToPlaylistModal').style.display = 'flex';
+      } catch (error) {
+        console.error('Error loading playlists:', error);
+        alert('Error loading playlists. Please try again.');
+      }
+    }
+
+    function closeAddToPlaylist() {
+      document.getElementById('addToPlaylistModal').style.display = 'none';
+      currentSongId = null;
+    }
+
+    document.getElementById('addToPlaylistForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const playlistId = document.getElementById('playlistSelect').value;
+      
+      if (!playlistId || !currentSongId) {
+        alert('Please select a playlist');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/playlists/${playlistId}/add-song`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ songId: currentSongId })
+        });
+        
+        if (response.ok) {
+          alert('Song added to playlist successfully!');
+          closeAddToPlaylist();
+        } else {
+          const error = await response.text();
+          alert('Error: ' + error);
+        }
+      } catch (error) {
+        console.error('Error adding song:', error);
+        alert('Error adding song to playlist. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
+
