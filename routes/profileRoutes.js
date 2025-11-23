@@ -9,8 +9,6 @@ const Achievement = require('../models/Achievement');
 const Song = require('../models/Song');
 const { isLoggedIn } = require('../middleware/auth');
 
-const Achievement = require('../models/Achievement');
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, '../public/avatars');
