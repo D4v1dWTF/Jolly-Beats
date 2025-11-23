@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse All Songs - Jolly Beats</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="/">Jolly Beats</a></h1>
+      <nav>
+        <a href="/songs">My Songs</a>
+        <a href="/songs/browse">Browse All</a>
+        <a href="/playlists">Playlists</a>
+        <a href="/forum">Forum</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="btn-logout">Logout (<%= user.username %>)</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <h2>Browse All Songs</h2>
+        <p>Discover music uploaded by all users</p>
+      </div>
+
+      <div class="search-filter-bar">
+        <form action="/songs/browse" method="GET" class="search-form">
+          <input type="text" name="search" placeholder="Search by title, artist, or album..." value="<%= search %>">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+
+      <div class="songs-list">
+        <% if (songs.length === 0) { %>
+          <p class="no-data">No songs found.</p>
+        <% } else { %>
+          <table class="songs-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Uploaded By</th>
+                <th>Play</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% songs.forEach(song => { %>
+                <tr class="song-item-grid">
+                  <td><%= song.title %></td>
+                  <td><%= song.artist %></td>
+                  <td><%= song.album || 'N/A' %></td>
+                  <td><%= song.uploadedBy.displayName || song.uploadedBy.username %></td>
+                  <td class="play-cell">
+                    <audio controls class="audio-player">
+                      <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                    </audio>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Jolly Beats</p>
+    </footer>
+  </div>
+</body>
+</html>
+
