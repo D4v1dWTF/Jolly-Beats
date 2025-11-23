@@ -9,6 +9,11 @@
 <body>
   <div class="container">
     <header>
+      <button class="font-size-toggle" onclick="toggleFontSize()">
+        <span class="size-a" id="sizeSmall">A</span>
+        <span class="size-a" id="sizeNormal">A</span>
+        <span class="size-a" id="sizeLarge">A</span>
+      </button>
       <h1><a href="/">Jolly Beats</a></h1>
       <nav>
         <a href="/songs">My Songs</a>
@@ -108,6 +113,51 @@
   </div>
 
   <script>
+    function updateFontSizeIndicator() {
+      const currentSize = localStorage.getItem('fontSize') || 'normal';
+      document.getElementById('sizeSmall').classList.remove('active');
+      document.getElementById('sizeNormal').classList.remove('active');
+      document.getElementById('sizeLarge').classList.remove('active');
+
+      if (currentSize === 'small') {
+        document.getElementById('sizeSmall').classList.add('active');
+      } else if (currentSize === 'large') {
+        document.getElementById('sizeLarge').classList.add('active');
+      } else {
+        document.getElementById('sizeNormal').classList.add('active');
+      }
+    }
+
+    function toggleFontSize() {
+      const body = document.body;
+      const currentSize = localStorage.getItem('fontSize') || 'normal';
+      let newSize;
+
+      if (currentSize === 'normal') {
+        newSize = 'large';
+        body.className = 'font-large';
+      } else if (currentSize === 'large') {
+        newSize = 'small';
+        body.className = 'font-small';
+      } else {
+        newSize = 'normal';
+        body.className = '';
+      }
+
+      localStorage.setItem('fontSize', newSize);
+      updateFontSizeIndicator();
+    }
+
+    window.addEventListener('load', function() {
+      const savedSize = localStorage.getItem('fontSize') || 'normal';
+      if (savedSize === 'small') {
+        document.body.className = 'font-small';
+      } else if (savedSize === 'large') {
+        document.body.className = 'font-large';
+      }
+      updateFontSizeIndicator();
+    });
+
     let listeningStartTime = null;
     let currentAudio = null;
 

@@ -831,6 +831,76 @@ header nav a:hover {
   background: #ccc;
 }
 
+/* World Page Table Adjustments */
+.data-table td:nth-child(7) {
+  width: 100px;
+}
+
+.data-table td:nth-child(8) {
+  width: 250px;
+}
+
+.data-table td:nth-child(8) audio {
+  width: 100%;
+}
+
+/* Font Size Adjustment */
+:root {
+  --font-size-base: 16px;
+}
+
+body.font-small {
+  font-size: 14px;
+}
+
+body.font-large {
+  font-size: 18px;
+}
+
+.font-size-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: #667eea;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.font-size-toggle:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.font-size-toggle .size-a {
+  font-size: 12px;
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+
+.font-size-toggle .size-a.active {
+  opacity: 1;
+  color: #764ba2;
+  font-weight: bold;
+}
+
+.font-size-toggle .size-a:nth-child(2) {
+  font-size: 16px;
+}
+
+.font-size-toggle .size-a:nth-child(3) {
+  font-size: 20px;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .container {
