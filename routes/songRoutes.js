@@ -69,7 +69,7 @@ router.get('/', isLoggedIn, async (req, res) => {
   }
 });
 
-// Browse all users' songs (World)
+// Browse all users songs
 router.get('/browse', isLoggedIn, async (req, res) => {
   try {
     const { search, genre, artist } = req.query;

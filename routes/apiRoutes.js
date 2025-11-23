@@ -164,15 +164,15 @@ router.delete('/songs/:id', async (req, res) => {
 // Get all playlists
 router.get('/playlists', async (req, res) => {
   try {
-    const playlists = await Playlist.find()
+    let query = {};
+    if (req.session && req.session.user) {
+      query = { owner: req.session.user.id };
+    }
+    const playlists = await Playlist.find(query)
       .populate('owner', 'username')
       .populate('songs');
     
-    res.json({
-      success: true,
-      count: playlists.length,
-      data: playlists
-    });
+    res.json(playlists);
   } catch (error) {
     console.error('API Error:', error);
     res.status(500).json({

@@ -14,7 +14,7 @@ async function verifyGridFS() {
 
     const db = mongoose.connection.db;
     
-    // Check uploads.files collection (file metadata)
+    // Check uploads.files collection
     const filesCollection = db.collection('uploads.files');
     const fileCount = await filesCollection.countDocuments();
     
@@ -29,23 +29,22 @@ async function verifyGridFS() {
         console.log(`   File ID: ${file._id}`);
         console.log(`   Size: ${(file.length / 1024 / 1024).toFixed(2)} MB`);
         console.log(`   Upload Date: ${file.uploadDate}`);
-        console.log(`   Content Type: ${file.contentType || 'audio/mpeg'}`);
+        console.log(`   Content Type: ${file.contentType || 'audio'}`);
       });
     } else {
       console.log('\nNo files found in GridFS yet.');
       console.log('Upload a song through the website first!');
     }
     
-    // Check uploads.chunks collection (actual file data)
+    // Check uploads.chunks collection
     const chunksCollection = db.collection('uploads.chunks');
     const chunkCount = await chunksCollection.countDocuments();
     console.log(`\n=== GridFS Chunks Collection ===`);
     console.log(`Total data chunks: ${chunkCount}`);
-    console.log(`(Each file is split into ~255KB chunks)\n`);
     
     if (fileCount > 0 && chunkCount > 0) {
       console.log('SUCCESS! Music files are stored in MongoDB!');
-      console.log('Files are in GridFS (uploads.files + uploads.chunks)');
+      console.log('Files are in GridFS uploads.files and uploads.chunks');
       console.log('This will work on ANY server, Ubuntu, cloud, anywhere!\n');
     }
     

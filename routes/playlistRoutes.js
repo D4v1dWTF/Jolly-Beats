@@ -115,17 +115,26 @@ router.post('/:id/add-song', isLoggedIn, async (req, res) => {
     
     // Validation
     if (!songId) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(400).json({ error: 'Song ID is required' });
+      }
       return res.redirect(`/playlists/${req.params.id}`);
     }
     
-    // Check if song belongs to user
+    // Check if song exists
     const song = await Song.findById(songId);
-    if (!song || song.uploadedBy.toString() !== req.session.user.id) {
-      return res.status(403).send('You can only add your own songs to playlists');
+    if (!song) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(404).json({ error: 'Song not found' });
+      }
+      return res.status(404).send('Song not found');
     }
     
     // Check if song already in playlist
     if (playlist.songs.includes(songId)) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(400).json({ error: 'Song already in playlist' });
+      }
       return res.redirect(`/playlists/${req.params.id}`);
     }
     
@@ -133,9 +142,15 @@ router.post('/:id/add-song', isLoggedIn, async (req, res) => {
     playlist.songs.push(songId);
     await playlist.save();
     
+    if (req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true });
+    }
     res.redirect(`/playlists/${req.params.id}`);
   } catch (error) {
     console.error('Add song error:', error);
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ error: 'Error adding song to playlist' });
+    }
     res.status(500).send('Error adding song to playlist');
   }
 });

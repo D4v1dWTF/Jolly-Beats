@@ -60,6 +60,7 @@
                 <th>Uploaded By</th>
                 <th>Rating</th>
                 <th>Play</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -74,7 +75,7 @@
                   <td>
                     <% if (song.uploadedBy._id.toString() === user.id) { %>
                       <div class="rating-display">
-                        <%= song.averageRating > 0 ? song.averageRating : 'No ratings' %>
+                        <%= song.averageRating > 0 ? song.averageRating : 'N/A' %>
                       </div>
                     <% } else { %>
                       <% const userRating = song.ratings.find(r => r.user && r.user.toString() === user.id); %>
@@ -89,7 +90,7 @@
                         </select>
                       </form>
                       <% if (song.averageRating > 0) { %>
-                        <small style="display:block;color:#667eea;">Avg: <%= song.averageRating %></small>
+                        <small style="display:block;color:#667eea;"><%= song.averageRating %></small>
                       <% } %>
                     <% } %>
                   </td>
@@ -98,6 +99,9 @@
                       <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
                       Your browser does not support audio playback.
                     </audio>
+                  </td>
+                  <td>
+                    <button class="btn-small btn-primary" onclick="openAddToPlaylist('<%= song._id %>', '<%= song.title.replace(/'/g, "\\'") %>')">Add</button>
                   </td>
                 </tr>
               <% }); %>
@@ -110,6 +114,23 @@
     <footer>
       <p>&copy; 2025 Jolly Beats</p>
     </footer>
+  </div>
+
+  <!-- Add to Playlist Modal -->
+  <div id="addToPlaylistModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>Add to Playlist</h3>
+      <p id="songToAdd"></p>
+      <form id="addToPlaylistForm" method="POST">
+        <select name="playlistId" id="playlistSelect" required>
+          <option value="">Select a playlist...</option>
+        </select>
+        <div class="form-buttons">
+          <button type="submit" class="btn btn-primary">Add to Playlist</button>
+          <button type="button" class="btn btn-secondary" onclick="closeAddToPlaylist()">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -226,6 +247,69 @@
         setTimeout(() => notif.remove(), 500);
       }, 5000);
     }
+
+    let currentSongId = null;
+
+    async function openAddToPlaylist(songId, songTitle) {
+      currentSongId = songId;
+      document.getElementById('songToAdd').textContent = 'Song: ' + songTitle;
+      
+      try {
+        const response = await fetch('/api/playlists');
+        const playlists = await response.json();
+        
+        const select = document.getElementById('playlistSelect');
+        select.innerHTML = '<option value="">Select a playlist...</option>';
+        
+        playlists.forEach(playlist => {
+          const option = document.createElement('option');
+          option.value = playlist._id;
+          option.textContent = playlist.name;
+          select.appendChild(option);
+        });
+        
+        document.getElementById('addToPlaylistModal').style.display = 'flex';
+      } catch (error) {
+        console.error('Error loading playlists:', error);
+        alert('Error loading playlists. Please try again.');
+      }
+    }
+
+    function closeAddToPlaylist() {
+      document.getElementById('addToPlaylistModal').style.display = 'none';
+      currentSongId = null;
+    }
+
+    document.getElementById('addToPlaylistForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const playlistId = document.getElementById('playlistSelect').value;
+      
+      if (!playlistId || !currentSongId) {
+        alert('Please select a playlist');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/playlists/${playlistId}/add-song`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ songId: currentSongId })
+        });
+        
+        if (response.ok) {
+          alert('Song added to playlist successfully!');
+          closeAddToPlaylist();
+        } else {
+          const error = await response.text();
+          alert('Error: ' + error);
+        }
+      } catch (error) {
+        console.error('Error adding song:', error);
+        alert('Error adding song to playlist. Please try again.');
+      }
+    });
   </script>
 </body>
 </html>
