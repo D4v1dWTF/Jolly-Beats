@@ -71,7 +71,7 @@
                   <td><%= song.album || '-' %></td>
                   <td><%= song.genre || '-' %></td>
                   <td><%= song.year || '-' %></td>
-                  <td><%= song.uploadedBy.displayName %></td>
+                  <td><%= song.uploadedBy.displayName || song.uploadedBy.username %></td>
                   <td>
                     <% if (song.uploadedBy._id.toString() === user.id) { %>
                       <div class="rating-display">
