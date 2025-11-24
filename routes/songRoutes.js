@@ -236,7 +236,7 @@ router.post('/upload', isLoggedIn, upload.single('songFile'), async (req, res) =
       return res.render('uploadSong', { error: 'Please select a music file' });
     }
     
-    const { title, artist, album, genre, year, duration } = req.body;
+    const { title, artist } = req.body;
     
     // Validation
     if (!title || !artist) {
@@ -259,9 +259,9 @@ router.post('/upload', isLoggedIn, upload.single('songFile'), async (req, res) =
     const newSong = new Song({
       title,
       artist,
-      album: album || '',
-      genre: genre || '',
-      year: year || null,
+      album: '',
+      genre: '',
+      year: null,
       duration: '',
       filename: uploadStream.id.toString(),
       uploadedBy: req.session.user.id
@@ -339,7 +339,7 @@ router.post('/edit/:id', isLoggedIn, async (req, res) => {
       return res.status(403).send('You can only edit your own songs');
     }
     
-    const { title, artist, album, genre, year } = req.body;
+    const { title, artist } = req.body;
     
     // Validation
     if (!title || !artist) {
@@ -349,9 +349,9 @@ router.post('/edit/:id', isLoggedIn, async (req, res) => {
     // Update song
     song.title = title;
     song.artist = artist;
-    song.album = album || '';
-    song.genre = genre || '';
-    song.year = year || null;
+    song.album = '';
+    song.genre = '';
+    song.year = null;
     song.duration = '';
     
     await song.save();

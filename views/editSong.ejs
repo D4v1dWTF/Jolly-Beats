@@ -44,21 +44,6 @@
             <input type="text" id="artist" name="artist" value="<%= song.artist %>" required>
           </div>
 
-          <div class="form-group">
-            <label for="album">Album:</label>
-            <input type="text" id="album" name="album" value="<%= song.album %>">
-          </div>
-
-          <div class="form-group">
-            <label for="genre">Genre:</label>
-            <input type="text" id="genre" name="genre" value="<%= song.genre %>">
-          </div>
-
-          <div class="form-group">
-            <label for="year">Year:</label>
-            <input type="number" id="year" name="year" value="<%= song.year %>" min="1900" max="2026">
-          </div>
-
           <div class="form-buttons">
             <button type="submit" class="btn btn-primary">Update Song</button>
             <a href="/songs" class="btn btn-secondary">Cancel</a>
