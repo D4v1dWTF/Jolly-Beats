@@ -55,8 +55,7 @@
       <!-- Search Form -->
       <div class="search-box">
         <form action="/songs" method="GET" class="search-form">
-          <input type="text" name="search" placeholder="Search by title, artist, or album..." value="<%= search %>">
-          <input type="text" name="genre" placeholder="Genre" value="<%= genre %>">
+          <input type="text" name="search" placeholder="Search by title or artist..." value="<%= search %>">
           <input type="text" name="artist" placeholder="Artist" value="<%= artist %>">
           <button type="submit" class="btn btn-secondary">Search</button>
           <a href="/songs" class="btn btn-secondary">Clear</a>
@@ -75,7 +74,6 @@
               <tr>
                 <th>Title</th>
                 <th>Artist</th>
-                <th>Genre</th>
                 <th>Uploaded By</th>
                 <th>Play</th>
                 <th>Actions</th>
@@ -86,7 +84,6 @@
                 <tr>
                   <td><%= song.title %></td>
                   <td><%= song.artist %></td>
-                  <td><%= song.genre || '-' %></td>
                   <td><%= song.uploadedBy.displayName || song.uploadedBy.username %></td>
                   <td class="play-column">
                     <audio controls style="width: 100%; min-width: 400px;">

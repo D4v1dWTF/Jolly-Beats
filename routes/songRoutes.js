@@ -55,21 +55,16 @@ const upload = multer({
 // List user's songs only
 router.get('/', isLoggedIn, async (req, res) => {
   try {
-    const { search, genre, artist } = req.query;
+    const { search, artist } = req.query;
     let query = { uploadedBy: req.session.user.id };
     
     // Search songs
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
-        { artist: { $regex: search, $options: 'i' } },
-        { album: { $regex: search, $options: 'i' } }
+        { artist: { $regex: search, $options: 'i' } }
       ];
       query.uploadedBy = req.session.user.id;
-    }
-    
-    if (genre) {
-      query.genre = { $regex: genre, $options: 'i' };
     }
     
     if (artist) {
@@ -77,7 +72,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     }
     
     const songs = await Song.find(query).populate('uploadedBy', 'username displayName').sort({ uploadedAt: -1 });
-    res.render('songs', { songs, search: search || '', genre: genre || '', artist: artist || '', user: req.session.user, achievement: req.query.achievement || null });
+    res.render('songs', { songs, search: search || '', artist: artist || '', user: req.session.user, achievement: req.query.achievement || null });
   } catch (error) {
     console.error('Error fetching songs:', error);
     res.status(500).send('Error fetching songs');
@@ -87,20 +82,15 @@ router.get('/', isLoggedIn, async (req, res) => {
 // Browse all users songs
 router.get('/browse', isLoggedIn, async (req, res) => {
   try {
-    const { search, genre, artist } = req.query;
+    const { search, artist } = req.query;
     let query = {};
     
     // Search songs
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
-        { artist: { $regex: search, $options: 'i' } },
-        { album: { $regex: search, $options: 'i' } }
+        { artist: { $regex: search, $options: 'i' } }
       ];
-    }
-    
-    if (genre) {
-      query.genre = { $regex: genre, $options: 'i' };
     }
     
     if (artist) {
@@ -108,7 +98,7 @@ router.get('/browse', isLoggedIn, async (req, res) => {
     }
     
     const songs = await Song.find(query).populate('uploadedBy', 'username displayName').sort({ uploadedAt: -1 });
-    res.render('browseSongs', { songs, search: search || '', genre: genre || '', artist: artist || '', user: req.session.user });
+    res.render('browseSongs', { songs, search: search || '', artist: artist || '', user: req.session.user });
   } catch (error) {
     console.error('Error fetching songs:', error);
     res.status(500).send('Error fetching songs');
