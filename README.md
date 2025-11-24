@@ -76,7 +76,3 @@ COMP3810SEF Group Project
 - EJS template engine
 - Session based authentication
 - RESTful API endpoints
-
-## Website Access
-
-Visit the live website at: https://jolly-beats.onrender.com

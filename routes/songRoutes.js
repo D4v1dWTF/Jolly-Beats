@@ -7,6 +7,21 @@ const Song = require('../models/Song');
 const Achievement = require('../models/Achievement');
 const { isLoggedIn } = require('../middleware/auth');
 
+// Helper function to check and unlock allAchievements
+async function checkAllAchievements(achievements) {
+  const ach = achievements.achievements;
+  if (!ach.allAchievements && 
+      ach.firstPlaylist && ach.firstSong && ach.firstPost && 
+      ach.firstDelete && ach.firstPostDelete && ach.firstLike && 
+      ach.firstReply && ach.tenSongs && ach.fiveMinutes && 
+      ach.firstRating && ach.firstFiveStar && ach.firstOneStar) {
+    ach.allAchievements = true;
+    await achievements.save();
+    return 'Master Achiever|Unlock all achievements';
+  }
+  return null;
+}
+
 // Setup GridFS for storing files in MongoDB
 let gfs;
 let gridfsBucket;
@@ -161,6 +176,11 @@ router.post('/rate/:id', isLoggedIn, async (req, res) => {
     
     await achievements.save();
     
+    const allAchievementsUnlocked = await checkAllAchievements(achievements);
+    if (allAchievementsUnlocked) {
+      return res.redirect('/songs/browse?achievement=' + encodeURIComponent(allAchievementsUnlocked));
+    }
+    
     if (unlockedAchievement) {
       return res.redirect('/songs/browse?achievement=' + encodeURIComponent(unlockedAchievement));
     }
@@ -191,6 +211,11 @@ router.post('/track-listening', isLoggedIn, async (req, res) => {
     }
     
     await achievements.save();
+    
+    const allAchievementsUnlocked = await checkAllAchievements(achievements);
+    if (allAchievementsUnlocked) {
+      return res.json({ success: true, achievement: allAchievementsUnlocked });
+    }
     
     res.json({ success: true, achievement: unlockedAchievement });
   } catch (error) {
@@ -263,6 +288,11 @@ router.post('/upload', isLoggedIn, upload.single('songFile'), async (req, res) =
     }
     
     await achievements.save();
+    
+    const allAchievementsUnlocked = await checkAllAchievements(achievements);
+    if (allAchievementsUnlocked) {
+      return res.redirect('/songs?achievement=' + encodeURIComponent(allAchievementsUnlocked));
+    }
     
     if (unlockedAchievement) {
       return res.redirect('/songs?achievement=' + encodeURIComponent(unlockedAchievement));

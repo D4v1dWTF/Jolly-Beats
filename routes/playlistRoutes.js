@@ -6,6 +6,21 @@ const Song = require('../models/Song');
 const Achievement = require('../models/Achievement');
 const { isLoggedIn } = require('../middleware/auth');
 
+// Helper function to check and unlock allAchievements
+async function checkAllAchievements(achievements) {
+  const ach = achievements.achievements;
+  if (!ach.allAchievements && 
+      ach.firstPlaylist && ach.firstSong && ach.firstPost && 
+      ach.firstDelete && ach.firstPostDelete && ach.firstLike && 
+      ach.firstReply && ach.tenSongs && ach.fiveMinutes && 
+      ach.firstRating && ach.firstFiveStar && ach.firstOneStar) {
+    ach.allAchievements = true;
+    await achievements.save();
+    return 'Master Achiever|Unlock all achievements';
+  }
+  return null;
+}
+
 // List all playlists
 router.get('/', isLoggedIn, async (req, res) => {
   try {
@@ -59,6 +74,11 @@ router.post('/create', isLoggedIn, async (req, res) => {
       achievements.achievements.firstPlaylist = true;
       unlockedAchievement = 'Playlist Creator|Create your first playlist';
       await achievements.save();
+    }
+    
+    const allAchievementsUnlocked = await checkAllAchievements(achievements);
+    if (allAchievementsUnlocked) {
+      return res.redirect('/playlists?achievement=' + encodeURIComponent(allAchievementsUnlocked));
     }
     
     if (unlockedAchievement) {

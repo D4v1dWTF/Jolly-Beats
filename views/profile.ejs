@@ -219,6 +219,16 @@
                 <span class="status">Locked</span>
               <% } %>
             </div>
+
+            <div class="achievement <%= achievements.achievements.allAchievements ? 'unlocked' : 'locked' %>">
+              <h4>Master Achiever</h4>
+              <p>Unlock all achievements</p>
+              <% if (achievements.achievements.allAchievements) { %>
+                <span class="status">Unlocked</span>
+              <% } else { %>
+                <span class="status">Locked</span>
+              <% } %>
+            </div>
           </div>
         </div>
       </div>

@@ -75,7 +75,7 @@
                   <td>
                     <% if (song.uploadedBy._id.toString() === user.id) { %>
                       <div class="rating-display">
-                        <%= song.averageRating > 0 ? song.averageRating : 'N/A' %>
+                        <%= song.averageRating > 0 ? song.averageRating : '0' %>
                       </div>
                     <% } else { %>
                       <% const userRating = song.ratings.find(r => r.user && r.user.toString() === user.id); %>

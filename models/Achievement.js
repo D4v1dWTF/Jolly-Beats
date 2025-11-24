@@ -19,7 +19,8 @@ const achievementSchema = new mongoose.Schema({
     fiveMinutes: { type: Boolean, default: false },
     firstRating: { type: Boolean, default: false },
     firstFiveStar: { type: Boolean, default: false },
-    firstOneStar: { type: Boolean, default: false }
+    firstOneStar: { type: Boolean, default: false },
+    allAchievements: { type: Boolean, default: false }
   },
   totalListeningTime: {
     type: Number,
