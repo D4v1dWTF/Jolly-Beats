@@ -886,7 +886,9 @@ header nav a:hover {
 
 .songs-list.world-page .data-table td:nth-child(7) {
   width: 10%;
-  max-width: 100px;
+  min-width: 100px;
+  max-width: 150px;
+  white-space: nowrap;
 }
 
 .songs-list.world-page .data-table td:nth-child(1),
@@ -895,6 +897,11 @@ header nav a:hover {
 .songs-list.world-page .data-table td:nth-child(4) {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.songs-list.world-page .data-table td:nth-child(7) {
+  overflow: visible;
   white-space: nowrap;
 }
 
