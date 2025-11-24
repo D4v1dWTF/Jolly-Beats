@@ -845,49 +845,68 @@ header nav a:hover {
 .songs-list.world-page .data-table {
   width: 100%;
   max-width: 100%;
-  table-layout: fixed;
+  table-layout: auto;
+  min-width: 1200px;
 }
 
 .songs-list.world-page .data-table td:nth-child(1) {
-  width: 15%;
-  max-width: 150px;
-}
-
-.songs-list.world-page .data-table td:nth-child(2) {
-  width: 15%;
-  max-width: 150px;
-}
-
-.songs-list.world-page .data-table td:nth-child(3) {
-  width: 12%;
+  width: 120px;
   max-width: 120px;
 }
 
-.songs-list.world-page .data-table td:nth-child(4) {
-  width: 8%;
+.songs-list.world-page .data-table td:nth-child(2) {
+  width: 100px;
   max-width: 100px;
 }
 
-.songs-list.world-page .data-table td:nth-child(5) {
-  width: 30%;
-  min-width: 350px;
-  max-width: 450px;
+.songs-list.world-page .data-table td:nth-child(3) {
+  width: 80px;
+  max-width: 80px;
 }
 
-.songs-list.world-page .data-table td:nth-child(5) audio {
-  width: 100%;
+.songs-list.world-page .data-table td:nth-child(4) {
+  width: 80px;
+  max-width: 80px;
+}
+
+.songs-list.world-page .data-table td:nth-child(5) {
+  width: 450px;
   min-width: 350px;
-  max-width: 450px;
+  max-width: 550px;
+  vertical-align: top;
+  padding: 10px;
+}
+
+.play-action-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.play-bar-container {
+  width: 100%;
+}
+
+.play-bar-container audio {
+  width: 100%;
+  min-width: 300px;
+  max-width: 500px;
   height: 50px;
 }
 
-.songs-list.world-page .data-table td:nth-child(6) {
-  width: 20%;
-  min-width: 150px;
-  max-width: 200px;
-  white-space: nowrap;
-  overflow: visible;
+.action-button-container {
+  width: 100%;
   text-align: center;
+  margin-top: 5px;
+}
+
+.action-button-container button {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  padding: 8px 20px !important;
+  margin: 0 !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(1),
@@ -1088,9 +1107,38 @@ body.font-large {
     font-size: 0.9em;
   }
 
+  .songs-list.world-page .data-table {
+    display: table !important;
+    table-layout: fixed !important;
+  }
+
+  .songs-list.world-page .data-table td:nth-child(5) {
+    min-width: 300px !important;
+    display: table-cell !important;
+    visibility: visible !important;
+  }
+
+  .play-action-column {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .action-button-container button {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+  }
+
   audio {
     width: 200px;
     height: 35px;
+  }
+
+  .play-bar-container audio {
+    min-width: 250px !important;
+    max-width: 350px !important;
   }
 
   .form {

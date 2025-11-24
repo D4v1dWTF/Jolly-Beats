@@ -55,8 +55,7 @@
                 <th>Artist</th>
                 <th>Uploaded By</th>
                 <th>Rating</th>
-                <th>Play</th>
-                <th>Action</th>
+                <th>Play & Action</th>
               </tr>
             </thead>
             <tbody>
@@ -87,14 +86,16 @@
                       <% } %>
                     <% } %>
                   </td>
-                  <td class="play-column">
-                    <audio controls style="width: 100%; min-width: 400px;">
-                      <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
-                      Your browser does not support audio playback.
-                    </audio>
-                  </td>
-                  <td>
-                    <button class="btn-small btn-primary" onclick="openAddToPlaylist('<%= song._id %>', '<%= song.title.replace(/'/g, "\\'") %>')">Add</button>
+                  <td class="play-action-column">
+                    <div class="play-bar-container">
+                      <audio controls style="width: 100%; min-width: 300px;">
+                        <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
+                        Your browser does not support audio playback.
+                      </audio>
+                    </div>
+                    <div class="action-button-container">
+                      <button class="btn-small btn-primary" onclick="openAddToPlaylist('<%= song._id %>', '<%= song.title.replace(/'/g, "\\'") %>')">Add to Playlist</button>
+                    </div>
                   </td>
                 </tr>
               <% }); %>
