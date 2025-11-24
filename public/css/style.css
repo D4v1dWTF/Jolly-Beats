@@ -834,14 +834,17 @@ header nav a:hover {
 /* World Page Table Adjustments */
 .data-table td:nth-child(7) {
   width: 80px;
+  min-width: 80px;
 }
 
 .data-table td:nth-child(8) {
-  width: 350px;
+  width: 600px;
+  min-width: 500px;
 }
 
 .data-table td:nth-child(8) audio {
   width: 100%;
+  min-width: 500px;
 }
 
 .data-table td:nth-child(9) {
