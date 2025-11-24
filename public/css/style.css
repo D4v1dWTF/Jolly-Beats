@@ -851,28 +851,31 @@ header nav a:hover {
 
 .songs-list.world-page .data-table th,
 .songs-list.world-page .data-table td {
-  text-align: center;
+  text-align: center !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(1) {
   width: 120px;
   max-width: 120px;
+  text-align: center !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(2) {
   width: 100px;
   max-width: 100px;
+  text-align: center !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(3) {
   width: 80px;
   max-width: 80px;
+  text-align: center !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(4) {
   width: 80px;
   max-width: 80px;
-  text-align: center;
+  text-align: center !important;
 }
 
 .songs-list.world-page .data-table td:nth-child(4) .rating-form,
@@ -892,7 +895,7 @@ header nav a:hover {
   max-width: 550px;
   vertical-align: top;
   padding: 10px;
-  text-align: center;
+  text-align: center !important;
 }
 
 .play-action-column {
@@ -933,7 +936,9 @@ header nav a:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-align: center;
+  text-align: center !important;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 /* Form Buttons Alignment */
@@ -1129,6 +1134,11 @@ body.font-large {
   .songs-list.world-page .data-table {
     display: table !important;
     table-layout: fixed !important;
+  }
+
+  .songs-list.world-page .data-table th,
+  .songs-list.world-page .data-table td {
+    text-align: center !important;
   }
 
   .songs-list.world-page .data-table td:nth-child(5) {
