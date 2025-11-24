@@ -291,22 +291,22 @@ header nav a:hover {
 
 .data-table audio {
   width: 100%;
-  max-width: 400px;
+  min-width: 500px;
+  height: 50px;
+}
+
+.play-column {
+  width: 50% !important;
+  min-width: 500px !important;
 }
 
 .data-table td:nth-child(1),
 .data-table td:nth-child(2),
-.data-table td:nth-child(3),
-.data-table td:nth-child(4),
-.data-table td:nth-child(5) {
-  max-width: 120px;
+.data-table td:nth-child(3) {
+  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.data-table td:nth-child(7) {
-  min-width: 80px;
 }
 
 .actions {
@@ -849,51 +849,42 @@ header nav a:hover {
 }
 
 .songs-list.world-page .data-table td:nth-child(1) {
-  width: 10%;
-  max-width: 120px;
+  width: 15%;
+  max-width: 150px;
 }
 
 .songs-list.world-page .data-table td:nth-child(2) {
-  width: 10%;
-  max-width: 120px;
+  width: 15%;
+  max-width: 150px;
 }
 
 .songs-list.world-page .data-table td:nth-child(3) {
-  width: 8%;
-  max-width: 100px;
-}
-
-.songs-list.world-page .data-table td:nth-child(4) {
-  width: 8%;
-  max-width: 100px;
-}
-
-.songs-list.world-page .data-table td:nth-child(5) {
-  width: 6%;
-  max-width: 80px;
-}
-
-.songs-list.world-page .data-table td:nth-child(6) {
   width: 10%;
   max-width: 120px;
 }
 
-.songs-list.world-page .data-table td:nth-child(7) {
+.songs-list.world-page .data-table td:nth-child(4) {
+  width: 12%;
+  max-width: 120px;
+}
+
+.songs-list.world-page .data-table td:nth-child(5) {
   width: 8%;
   max-width: 100px;
 }
 
-.songs-list.world-page .data-table td:nth-child(8) {
-  width: 30%;
-  min-width: 300px;
+.songs-list.world-page .data-table td:nth-child(6) {
+  width: 40%;
+  min-width: 500px;
 }
 
-.songs-list.world-page .data-table td:nth-child(8) audio {
+.songs-list.world-page .data-table td:nth-child(6) audio {
   width: 100%;
-  max-width: 100%;
+  min-width: 500px;
+  height: 50px;
 }
 
-.songs-list.world-page .data-table td:nth-child(9) {
+.songs-list.world-page .data-table td:nth-child(7) {
   width: 10%;
   max-width: 100px;
 }
@@ -901,9 +892,7 @@ header nav a:hover {
 .songs-list.world-page .data-table td:nth-child(1),
 .songs-list.world-page .data-table td:nth-child(2),
 .songs-list.world-page .data-table td:nth-child(3),
-.songs-list.world-page .data-table td:nth-child(4),
-.songs-list.world-page .data-table td:nth-child(5),
-.songs-list.world-page .data-table td:nth-child(6) {
+.songs-list.world-page .data-table td:nth-child(4) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

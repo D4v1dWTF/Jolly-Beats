@@ -54,9 +54,7 @@
               <tr>
                 <th>Title</th>
                 <th>Artist</th>
-                <th>Album</th>
                 <th>Genre</th>
-                <th>Year</th>
                 <th>Uploaded By</th>
                 <th>Rating</th>
                 <th>Play</th>
@@ -68,9 +66,7 @@
                 <tr>
                   <td><%= song.title %></td>
                   <td><%= song.artist %></td>
-                  <td><%= song.album || '-' %></td>
                   <td><%= song.genre || '-' %></td>
-                  <td><%= song.year || '-' %></td>
                   <td><%= song.uploadedBy.displayName || song.uploadedBy.username %></td>
                   <td>
                     <% if (song.uploadedBy._id.toString() === user.id) { %>
@@ -94,8 +90,8 @@
                       <% } %>
                     <% } %>
                   </td>
-                  <td>
-                    <audio controls data-song-id="<%= song._id %>">
+                  <td class="play-column">
+                    <audio controls style="width: 100%; min-width: 400px;">
                       <source src="/songs/stream/<%= song.filename %>" type="audio/mpeg">
                       Your browser does not support audio playback.
                     </audio>
