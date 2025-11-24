@@ -263,11 +263,13 @@ header nav a:hover {
 /* Data Table */
 .data-table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   background: white;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   border-radius: 10px;
   overflow: hidden;
+  table-layout: auto;
 }
 
 .data-table th,
@@ -304,7 +306,7 @@ header nav a:hover {
 }
 
 .data-table td:nth-child(7) {
-  min-width: 400px;
+  min-width: 80px;
 }
 
 .actions {
@@ -832,23 +834,79 @@ header nav a:hover {
 }
 
 /* World Page Table Adjustments */
-.data-table td:nth-child(7) {
-  width: 80px;
-  min-width: 80px;
-}
-
-.data-table td:nth-child(8) {
-  width: 600px;
-  min-width: 500px;
-}
-
-.data-table td:nth-child(8) audio {
+.songs-list.world-page {
   width: 100%;
-  min-width: 500px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
 }
 
-.data-table td:nth-child(9) {
-  width: 100px;
+.songs-list.world-page .data-table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+.songs-list.world-page .data-table td:nth-child(1) {
+  width: 10%;
+  max-width: 120px;
+}
+
+.songs-list.world-page .data-table td:nth-child(2) {
+  width: 10%;
+  max-width: 120px;
+}
+
+.songs-list.world-page .data-table td:nth-child(3) {
+  width: 8%;
+  max-width: 100px;
+}
+
+.songs-list.world-page .data-table td:nth-child(4) {
+  width: 8%;
+  max-width: 100px;
+}
+
+.songs-list.world-page .data-table td:nth-child(5) {
+  width: 6%;
+  max-width: 80px;
+}
+
+.songs-list.world-page .data-table td:nth-child(6) {
+  width: 10%;
+  max-width: 120px;
+}
+
+.songs-list.world-page .data-table td:nth-child(7) {
+  width: 8%;
+  max-width: 100px;
+}
+
+.songs-list.world-page .data-table td:nth-child(8) {
+  width: 30%;
+  min-width: 300px;
+}
+
+.songs-list.world-page .data-table td:nth-child(8) audio {
+  width: 100%;
+  max-width: 100%;
+}
+
+.songs-list.world-page .data-table td:nth-child(9) {
+  width: 10%;
+  max-width: 100px;
+}
+
+.songs-list.world-page .data-table td:nth-child(1),
+.songs-list.world-page .data-table td:nth-child(2),
+.songs-list.world-page .data-table td:nth-child(3),
+.songs-list.world-page .data-table td:nth-child(4),
+.songs-list.world-page .data-table td:nth-child(5),
+.songs-list.world-page .data-table td:nth-child(6) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Form Buttons Alignment */
