@@ -6,8 +6,12 @@
 
 **Group Info:**
 - Group Number: 50
-- Student Names: Wong Tsz Fung, Wan Kai Ho, Cheung Hoi Him, Holly Lei Stephenson
-- SID: [To be filled]
+- Student Names:
+- Wong Tsz Fung 14103405,
+- Wan Kai Ho 14030992,
+- Cheung Hoi Him 14112057,
+- Holly Lei Stephenson
+
 
 ## 2. Project File Intro
 
