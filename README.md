@@ -10,7 +10,7 @@
 - Wong Tsz Fung 14103405,
 - Wan Kai Ho 14030992,
 - Cheung Hoi Him 14112057,
-- Holly Lei Stephenson
+- Holly Lei Stephenson 13244241
 
 
 ## 2. Project File Intro
@@ -56,22 +56,30 @@ https://jolly-beats.onrender.com
 - Username: admin
 - Password: 123456
 
+- or you can try to make a new account to test
+
+**Register Steps**
+1. Navigate to the website URL
+2. Click on "Register" button
+3. Enter username, email(no need to enter a real email, just make sure enter the correct format like: test@test.com) and password
+4. Click "Submit" button to submit
+5. Enter the username and password on the Login page
+
 **Sign In Steps:**
 1. Navigate to the website URL
-2. Click on "Login" button in the navigation
+2. Click on "Login" button
 3. Enter username and password
 4. Click "Login" button to submit
-5. After successful login, you will be redirected to the main page with access to all features
 
 **Logout:**
-- Click on "Logout" button in the navigation bar (shown as "Logout (username)")
+- Click on "Logout" button in the right upper corner (shown as "Logout (username)")
 - Session will be destroyed and you will be redirected to the home page
 
 ### Use of CRUD Web Pages
 
 **CREATE:**
 - Songs: Click "Upload New Song" button on My Songs page, fill in title and artist, select music file, then click "Upload Song"
-- Playlists: Click "Create Playlist" button on Playlists page, enter name and description, then click "Create"
+- Playlists: Click "Create Playlist" button on Playlists page, enter name and description, then click "Create". To add song in your playlist, go to Home page or World page and there will be a "add to playlist" button. Click it and select the playlist you would like to add
 - Forum Posts: On Forum page, enter post content, optionally select a song, then click "Post"
 
 **READ:**
@@ -144,5 +152,3 @@ Get all forum posts:
 ```
 curl --ssl-no-revoke -X GET https://jolly-beats.onrender.com/api/posts
 ```
-
-**Note:** All API endpoints return JSON responses. The API does not require authentication as per project requirements. Replace [SONG_ID] and [USER_ID] with actual IDs from the database. On Windows, use the --ssl-no-revoke flag to avoid SSL certificate errors.
