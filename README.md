@@ -50,7 +50,7 @@ https://jolly-beats.onrender.com
 
 **Valid Login Information:**
 - Username: admin
-- Password: [password set during registration]
+- Password: 123456
 
 **Sign In Steps:**
 1. Navigate to the website URL
