@@ -108,10 +108,10 @@ https://jolly-beats.onrender.com
 - GET /api/posts: Get all forum posts
 
 **POST Create:**
-- POST /api/songs: Create a new song record (requires title, artist, filename, uploadedBy in JSON body)
+- POST /api/songs: Create a new song record (needs title, artist, filename, uploadedBy in JSON body)
 
 **PUT Update:**
-- PUT /api/songs/:id: Update a song by ID (requires title and artist in JSON body)
+- PUT /api/songs/:id: Update a song by ID (needs title and artist in JSON body)
 
 **DELETE Delete:**
 - DELETE /api/songs/:id: Delete a song by ID
