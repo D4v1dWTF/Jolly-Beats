@@ -9,7 +9,7 @@
 - Student Names:
 - Wong Tsz Fung 14103405,
 - Wan Kai Ho 14030992,
-- Cheung Hoi Him 14112057,
+- Cheung Ho Him 14112057,
 - Holly Lei Stephenson 13244241
 
 
